@@ -55,10 +55,10 @@ def get_file():
     os.remove(filename + ".mp3")
 
     #return redirect(best.url)
-    return send_file(strIO, attachment_filename= filename + ".mp3", as_attachment=True)
+    return send_file(strIO, attachment_filename = filename.encode('utf-8') + ".mp3", as_attachment=True)
     #return Response(stream_with_context(sound_data))
     return 'test'
 
 if __name__ == '__main__' :
     app.debug = True
-    app.run()
+    app.run(host='0.0.0.0')
