@@ -5,6 +5,7 @@ from flask import session
 from flask import send_file
 from flask import Response, stream_with_context
 from flask import redirect
+from bs4 import BeautifulSoup
 from subprocess import call
 import StringIO
 import socket
@@ -37,22 +38,17 @@ def get_file():
 
     print(filename)
 
-    call(["mplayer", "-novideo", "-nocorrect-pts", "-ao", "pcm:waveheader", filename])
-    call(["lame", "-h", "-b", "192", "audiodump.wav",  filename + ".mp3"])
-    os.remove("audiodump.wav")
-    os.remove(filename)
-
     #sound = AudioSegment.from_file(filename)
 
-    f = open(filename + ".mp3", "r")
+    f = open(filename, "r")
     sound_data = f.read()
     strIO = StringIO.StringIO()
     strIO.write(sound_data)
     strIO.seek(0)
-    os.remove(filename + ".mp3")
+    os.remove(filename)
 
     #return redirect(best.url)
-    return send_file(strIO, attachment_filename = filename + ".mp3", as_attachment=True)
+    return send_file(strIO, attachment_filename = filename.encode('utf-8'), as_attachment=True)
     #return Response(stream_with_context(sound_data))
     return 'test'
 
